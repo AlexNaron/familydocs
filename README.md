@@ -2,13 +2,7 @@
 
 ## Overview
 
-This Spring Boot application provides a RESTful API for managing documents with tagging functionality. It allows users to perform CRUD operations on documents and manage tags associated with them. Authentication is handled via Spring Security, ensuring that users can only access and modify their documents.
-
-## Features
-
-- **User Authentication:** Utilizes Spring Security for handling user authentication.
-- **Document CRUD:** Users can create, retrieve, update, and delete documents.
-- **Tag Management:** Users can add and remove tags from their documents.
+This Spring Boot application provides a RESTful API for managing documents with tagging functionality. It allows users to perform CRUD operations on documents and manage tags associated with them. 
 
 ## Getting Started
 
