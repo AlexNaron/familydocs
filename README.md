@@ -1,4 +1,4 @@
-# FAMILYDOCS Document Management Application
+# FamilyDOCS Document Management Application
 
 ## Overview
 
