@@ -21,17 +21,21 @@ public class SecurityConfig {
     public SecurityConfig(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
+
     @Bean
-    public static PasswordEncoder  passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http.csrf(csrf -> csrf.disable())
                 .authorizeRequests()
                 .anyRequest().permitAll()
@@ -39,8 +43,6 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
-
-
 
 
 }

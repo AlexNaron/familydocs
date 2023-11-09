@@ -20,17 +20,14 @@ public class Document {
     private User owner;
     @ManyToMany(mappedBy = "taggedDocuments")
     private Set<Tag> tags = new HashSet<>();
+
     public void setDocumentName(String documentName) {
         this.documentName = documentName;
     }
 
-    public void setDocumentLink(String documentLink) {
-        this.documentLink = documentLink;
-    }
+    public void setDocumentLink(String documentLink) { this.documentLink = documentLink; }
 
-    public void setDocumentDescription(String documentDescription) {
-        this.documentDescription = documentDescription;
-    }
+    public void setDocumentDescription(String documentDescription) { this.documentDescription = documentDescription; }
 
     public String getDocumentName() {
         return documentName;

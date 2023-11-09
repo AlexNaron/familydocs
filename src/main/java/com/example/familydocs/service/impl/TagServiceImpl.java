@@ -27,6 +27,7 @@ public class TagServiceImpl implements TagService {
     @Autowired
     public TagServiceImpl(DocumentRepository documentRepository, UserRepository userRepository,
                           TagRepository tagRepository){
+
         this.documentRepository = documentRepository;
         this.userRepository=userRepository;
         this.tagRepository = tagRepository;
@@ -34,28 +35,28 @@ public class TagServiceImpl implements TagService {
     protected String getCurrentUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
     protected User getCurrentUser(){
+
         String currentUsername = getCurrentUsername();
         User currentUser = userRepository.findByUsername(currentUsername);
 
-        if (currentUser == null) {
-            throw new UsernameNotFoundException("User not found!");
-        }
+        if (currentUser == null) { throw new UsernameNotFoundException("User not found!"); }
+
         return currentUser;
     }
     public Set<Document> getAllDocumentsForCurrentUserByTagName(String tagName){
+
         Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
-        if (!optionalTag.isPresent()) {
-            throw new TagNotFoundByNameException(tagName);
-        }
+        if (!optionalTag.isPresent()) { throw new TagNotFoundByNameException(tagName); }
         Tag currentTag = optionalTag.get();
         Set<Document> allDocumentsWithTagName = currentTag.getTaggedDocuments();
 
         User currentUser = getCurrentUser();
 
-        Set<Document> allDocumentsForCurrentUserWithTagName = allDocumentsWithTagName.stream()
+        return allDocumentsWithTagName
+                .stream()
                 .filter(d -> d.getOwner().equals(currentUser)).collect(Collectors.toSet());
-        return allDocumentsForCurrentUserWithTagName;
     }
 
 }

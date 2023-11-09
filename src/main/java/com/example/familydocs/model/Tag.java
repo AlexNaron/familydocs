@@ -15,17 +15,21 @@ public class Tag {
     private String tagName;
 
     @ManyToMany(fetch = FetchType.LAZY)
+
     @JoinTable(name = "document_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "document_id"))
+
     private Set<Document> taggedDocuments = new HashSet<>();
 
     public void setTagName(String tagName) {
         this.tagName = tagName;
     }
+
     public String getTagName() {
         return tagName;
     }
+
     public Set<Document> getTaggedDocuments() {
         return taggedDocuments;
     }
@@ -40,9 +44,11 @@ public class Tag {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
+
         return Objects.equals(id, tag.id);  // assuming `id` is the unique attribute
     }
 

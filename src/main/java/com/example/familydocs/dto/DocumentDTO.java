@@ -11,7 +11,7 @@ public class DocumentDTO {
     private String documentName;
     private String documentLink;
     private String documentDescription;
-    private Set<String> tagNames =  new HashSet<>();
+    private Set<String> tagNames = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -29,25 +29,19 @@ public class DocumentDTO {
         this.documentName = documentName;
     }
 
-    public String getDocumentLink() {
-        return documentLink;
-    }
+    public String getDocumentLink() { return documentLink; }
 
     public void setDocumentLink(String documentLink) {
         this.documentLink = documentLink;
     }
 
-    public String getDocumentDescription() {
-        return documentDescription;
-    }
+    public String getDocumentDescription() { return documentDescription; }
 
     public void setDocumentDescription(String documentDescription) {
         this.documentDescription = documentDescription;
     }
 
-    public Set<String> getTagNames() {
-        return tagNames;
-    }
+    public Set<String> getTagNames() { return tagNames; }
 
     public void setTagNames(Set<Tag> tags) {
         this.tagNames = tags.stream()
