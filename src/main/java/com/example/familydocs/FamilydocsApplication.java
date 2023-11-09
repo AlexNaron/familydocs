@@ -9,5 +9,4 @@ public class FamilydocsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FamilydocsApplication.class, args);
 	}
-
 }

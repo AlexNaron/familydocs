@@ -22,11 +22,12 @@ public class UserController {
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
     }
+
     @GetMapping("/hello")
     public String sayHello(@AuthenticationPrincipal UserDetails userDetails) {
+
         String username = userDetails.getUsername();
-        // Use the username or other user details as needed
-        System.out.println(userDetails);
+
         return "Hello, " + username;
     }
 }

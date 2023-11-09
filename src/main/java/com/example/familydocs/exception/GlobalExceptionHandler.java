@@ -9,19 +9,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
     @ExceptionHandler(DocumentNotFoundByIdException.class)
     public ResponseEntity<String> handleDocumentNotFound(DocumentNotFoundByIdException ex) {
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
     @ExceptionHandler(TagNotFoundByNameException.class)
     public ResponseEntity<String> handleTagNotFoundByName(TagNotFoundByNameException ex) {
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
     @ExceptionHandler(TagNotFoundByIdException.class)
     public ResponseEntity<String> handleTagNotFoundById(TagNotFoundByIdException ex) {
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundByName(UsernameNotFoundException ex) {
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

@@ -22,8 +22,10 @@ public class UserService {
     }
 
     public User addUser(User user) {
+
         String encodedUserPassword = passwordEncoder.encode((user.getPassword()));
         user.setPassword(encodedUserPassword);
+
         return userRepository.save(user);
     }
 }

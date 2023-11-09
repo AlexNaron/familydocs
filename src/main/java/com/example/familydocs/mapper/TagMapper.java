@@ -19,20 +19,18 @@ public class TagMapper {
     }
 
     public TagDTO toDTO(Tag tag) {
-        if (tag == null) {
-            return null;
-        }
+
+        if (tag == null) { return null; }
 
         TagDTO dto = new TagDTO();
         dto.setId(tag.getId());
         dto.setTagName(tag.getTagName());
+
         return dto;
     }
 
     public Tag toEntity(TagDTO dto) {
-        if (dto == null) {
-            return null;
-        }
+        if (dto == null) { return null; }
 
         return tagRepository.findByTagName(dto.getTagName())
                 .orElseGet(() -> {
