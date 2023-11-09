@@ -14,6 +14,7 @@ public class Document {
     private String documentName;
     private String documentLink;
     private String documentDescription;
+    private String storageUrl; // URL to access the PDF in object storage
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -36,8 +37,8 @@ public class Document {
         return documentName;
     }
 
-    public String getDocumentLink() {
-        return documentLink;
+    public String getStorageUrl() {
+        return storageUrl;
     }
 
     public String getDocumentDescription() {
@@ -60,5 +61,9 @@ public class Document {
 
     public Long getId() {
         return id;
+    }
+
+    public void setStorageUrl(String storageUrl) {
+        this.storageUrl = storageUrl;
     }
 }

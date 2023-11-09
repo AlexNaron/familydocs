@@ -27,7 +27,7 @@ public class DocumentMapper {
         DocumentDTO dto = new DocumentDTO();
         dto.setId(document.getId());
         dto.setDocumentName(document.getDocumentName());
-        dto.setDocumentLink(document.getDocumentLink());
+        dto.setStorageUrl(document.getStorageUrl());
         dto.setDocumentDescription(document.getDocumentDescription());
         dto.setTagNames(document.getTags());
 
@@ -38,11 +38,9 @@ public class DocumentMapper {
         if (dto == null) {
             return null;
         }
-
-        Document existingDocument =  documentRepository.findByDocumentName(dto.getDocumentName())
+        Document existingDocument =  documentRepository.findByDocumentId(dto.getId())
                 .orElse(null);
         if (existingDocument != null) {
-
             return existingDocument;
         } else {
             // No existing document found. The question here is, do I want to create the doc or do I throw an error?
