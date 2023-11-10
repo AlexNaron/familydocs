@@ -3,6 +3,7 @@ package com.example.familydocs.controller;
 import com.example.familydocs.dto.DocumentDTO;
 import com.example.familydocs.dto.DocumentUploadDTO;
 import com.example.familydocs.dto.TagDTO;
+import com.example.familydocs.logging.LoggableParameter;
 import com.example.familydocs.model.Document;
 import com.example.familydocs.model.Tag;
 import com.example.familydocs.service.DocumentService;
@@ -34,13 +35,13 @@ public class DocumentController {
     }
 
     @GetMapping
-    public Set<DocumentDTO> getAllDocumentsForUser(@AuthenticationPrincipal UserDetails userDetails) {
+    public Set<DocumentDTO> getAllDocumentsForUser(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails) {
 
         return documentService.getAllDocumentsForUser(userDetails.getUsername());
     }
 
     @PutMapping(consumes = {"multipart/form-data"})
-    public DocumentDTO uploadDocument(@AuthenticationPrincipal UserDetails userDetails,
+    public DocumentDTO uploadDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                       @ModelAttribute DocumentUploadDTO uploadDTO) {
 
         MultipartFile file = uploadDTO.getFile();
@@ -54,8 +55,8 @@ public class DocumentController {
     }
 
     @DeleteMapping("/{documentId}")
-    public ResponseEntity<DocumentDTO> deleteDocument(@AuthenticationPrincipal UserDetails userDetails,
-                                                      @PathVariable Long documentId) {
+    public ResponseEntity<DocumentDTO> deleteDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                      @LoggableParameter @PathVariable Long documentId) {
 
         DocumentDTO documentDTO = documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId);
         String objectName = documentDTO.getDocumentStorageName();
@@ -68,15 +69,16 @@ public class DocumentController {
     }
 
     @GetMapping("/{documentId}")
-    public DocumentDTO getDocumentById(@AuthenticationPrincipal UserDetails userDetails,
-                                       @PathVariable Long documentId) {
+    public DocumentDTO getDocumentById(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                       @LoggableParameter @PathVariable Long documentId) {
 
         return documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId);
     }
 
     @PostMapping("/{documentId}/tag")
-    public ResponseEntity<DocumentDTO> addTagsForDocument(@AuthenticationPrincipal UserDetails userDetails,
-                                                          @PathVariable Long documentId, @RequestBody Tag tag) {
+    public ResponseEntity<DocumentDTO> addTagsForDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                          @LoggableParameter @PathVariable Long documentId,
+                                                          @LoggableParameter @RequestBody Tag tag) {
 
         String tagName = tag.getTagName();
         DocumentDTO documentDTO = documentService
@@ -86,16 +88,16 @@ public class DocumentController {
     }
 
     @GetMapping("/{documentId}/tag")
-    public Set<TagDTO> getTagsByDocumentId(@AuthenticationPrincipal UserDetails userDetails,
-                                           @PathVariable Long documentId) {
+    public Set<TagDTO> getTagsByDocumentId(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                           @LoggableParameter @PathVariable Long documentId) {
 
         return documentService.getAllTagsDTOForDocumentForUserById(userDetails.getUsername(), documentId);
     }
 
     @DeleteMapping("/{documentId}/tag/{tagId}")
-    public ResponseEntity<String> deleteTagByIdForDocument(@AuthenticationPrincipal UserDetails userDetails,
-                                                           @PathVariable Long documentId,
-                                                           @PathVariable Long tagId) {
+    public ResponseEntity<String> deleteTagByIdForDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                           @LoggableParameter @PathVariable Long documentId,
+                                                           @LoggableParameter @PathVariable Long tagId) {
 
         TagDTO tagDTO = documentService.deleteTagForDocumentForUser(userDetails.getUsername(), documentId, tagId);
 
@@ -104,8 +106,8 @@ public class DocumentController {
     }
 
     @GetMapping("/{documentId}/pdf")
-    public ResponseEntity<InputStreamResource> downloadOdfFile(@AuthenticationPrincipal UserDetails userDetails,
-                                         @PathVariable Long documentId) {
+    public ResponseEntity<InputStreamResource> downloadOdfFile(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                               @LoggableParameter @PathVariable Long documentId) {
 
         DocumentDTO documentDTO = documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId);
         try {

@@ -1,6 +1,8 @@
 package com.example.familydocs.service;
 
 import io.minio.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,8 @@ public class FileStorageService {
     private final MinioClient minioClient;
 
     private final String bucketName = "pdfs";
+
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 
     @Autowired
     public FileStorageService(MinioClient minioClient) {
@@ -55,6 +59,8 @@ public class FileStorageService {
                     .build()
             );
 
+            logger.info("Minio service: PDF with name {} for user {} has been uploaded", objectName, userName);
+
             return objectName;
 
         } catch (Exception e) {
@@ -76,6 +82,7 @@ public class FileStorageService {
     public void deleteFile(String fileName) {
         try {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(fileName).build());
+            logger.info("Minio service: PDF with name {} has been deleted", fileName);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting file", e);
         }
