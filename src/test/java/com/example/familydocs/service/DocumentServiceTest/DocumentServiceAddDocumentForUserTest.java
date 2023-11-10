@@ -5,7 +5,6 @@ import com.example.familydocs.model.Document;
 import com.example.familydocs.service.DocumentServiceBaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +15,6 @@ import static org.mockito.Mockito.when;
 /**
  * Test suite for the function getAllDocumentsForUser from DocumentServiceImpl class.
  */
-@SpringBootTest
 public class DocumentServiceAddDocumentForUserTest extends DocumentServiceBaseTest {
 
     @BeforeEach

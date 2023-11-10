@@ -5,7 +5,6 @@ import com.example.familydocs.model.Document;
 import com.example.familydocs.service.DocumentServiceBaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Arrays;
@@ -21,7 +20,6 @@ import static org.mockito.Mockito.when;
 /**
  * Test suite for the function getAllDocumentsForUser from DocumentServiceImpl class.
  */
-@SpringBootTest
 public class DocumentServiceGetAllDocumentsForUserTest extends DocumentServiceBaseTest {
 
     @BeforeEach
@@ -34,7 +32,7 @@ public class DocumentServiceGetAllDocumentsForUserTest extends DocumentServiceBa
      */
     @Test
     public void testGetAllDocumentsForUser() {
-        List<Document> documentList = Arrays.asList(mockDocument);
+        List<Document> documentList = Collections.singletonList(mockDocument);
         Set<DocumentDTO> expectedDocumentDTOSet = documentList.stream()
                 .map(document -> new DocumentDTO())
                 .collect(Collectors.toSet());
@@ -93,8 +91,6 @@ public class DocumentServiceGetAllDocumentsForUserTest extends DocumentServiceBa
         when(userRepository.findByUsername(userName)).thenReturn(null);
 
         // Assert that UsernameNotFoundException is thrown
-        assertThrows(UsernameNotFoundException.class, () -> {
-            documentService.getAllDocumentsForUser(userName);
-        });
+        assertThrows(UsernameNotFoundException.class, () -> documentService.getAllDocumentsForUser(userName));
     }
 }
