@@ -9,10 +9,9 @@ import java.util.stream.Collectors;
 public class DocumentDTO {
     private Long id;
     private String documentName;
-    private String documentLink;
     private String documentDescription;
     private Set<String> tagNames =  new HashSet<>();
-    private String storageUrl; // URL to access the PDF in object storage
+    private String documentStorageName; // URL to access the PDF in object storage
 
     public Long getId() {
         return id;
@@ -30,10 +29,11 @@ public class DocumentDTO {
         this.documentName = documentName;
     }
 
-    public String getStorageUrl() {
-        return storageUrl;
+    public String getDocumentStorageName() {
+        return documentStorageName;
     }
-    public void setStorageUrl(String storageUrl) { this.storageUrl = storageUrl; }
+
+    public void setDocumentStorageName(String documentStorageName) { this.documentStorageName = documentStorageName; }
 
     public String getDocumentDescription() { return documentDescription; }
 
@@ -44,6 +44,7 @@ public class DocumentDTO {
     public Set<String> getTagNames() { return tagNames; }
 
     public void setTagNames(Set<Tag> tags) {
+
         this.tagNames = tags.stream()
                 .map(Tag::getTagName)
                 .collect(Collectors.toSet());

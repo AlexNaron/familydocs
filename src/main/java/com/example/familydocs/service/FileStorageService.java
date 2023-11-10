@@ -6,19 +6,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.util.UUID;
 
 @Service
 public class FileStorageService {
 
     private final MinioClient minioClient;
+
     private final String bucketName = "pdfs";
 
     @Autowired
     public FileStorageService(MinioClient minioClient) {
         this.minioClient = minioClient;
         try {
-            // Check if the bucket exists, and if not, create it
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
@@ -29,21 +30,33 @@ public class FileStorageService {
     }
 
     private String getUniqueFileName(String originalFilename, String userName) {
+
+        String sanitizedOriginalFilename = Normalizer.normalize(originalFilename, Normalizer.Form.NFD);
+        sanitizedOriginalFilename = sanitizedOriginalFilename.replaceAll("[^\\p{ASCII}]", "");
+
         String uuidToken = UUID.randomUUID().toString();
-        return bucketName + userName + "/" + uuidToken + "-" + originalFilename;
+        return bucketName + "/" + userName + "/" + uuidToken + "-" + sanitizedOriginalFilename;
     }
 
     public String uploadFile(MultipartFile file, String userName) {
+
         try {
-            String fileName = getUniqueFileName(file.getOriginalFilename(), userName);
+            String objectName = getUniqueFileName(file.getOriginalFilename(), userName);
             InputStream is = file.getInputStream();
-            minioClient.uploadObject(
-                    UploadObjectArgs.builder()
+            long fileSize = file.getSize();
+            String contentType = file.getContentType();
+
+            minioClient.putObject(
+                    PutObjectArgs.builder()
                     .bucket(bucketName)
-                    .filename(fileName)
+                    .object(objectName)
+                    .stream(is, fileSize, -1)
+                    .contentType(contentType)
                     .build()
             );
-            return fileName;
+
+            return objectName;
+
         } catch (Exception e) {
             throw new RuntimeException("Error storing file", e);
         }
