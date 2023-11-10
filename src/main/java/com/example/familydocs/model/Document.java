@@ -12,8 +12,8 @@ public class Document {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String documentName;
-    private String documentLink;
     private String documentDescription;
+    private String documentStorageName; // URL to access the PDF in object storage
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -25,16 +25,14 @@ public class Document {
         this.documentName = documentName;
     }
 
-    public void setDocumentLink(String documentLink) { this.documentLink = documentLink; }
-
     public void setDocumentDescription(String documentDescription) { this.documentDescription = documentDescription; }
 
     public String getDocumentName() {
         return documentName;
     }
 
-    public String getDocumentLink() {
-        return documentLink;
+    public String getDocumentStorageName() {
+        return documentStorageName;
     }
 
     public String getDocumentDescription() {
@@ -57,5 +55,9 @@ public class Document {
 
     public Long getId() {
         return id;
+    }
+
+    public void setDocumentStorageName(String storageUrl) {
+        this.documentStorageName = storageUrl;
     }
 }
