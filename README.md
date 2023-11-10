@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 - Java JDK 17 or later
-- Maven 4.0
+- Gradle 1.1.3
 - An IDE such as IntelliJ IDEA, Eclipse, or Spring Tool Suite
 
 ### Installing
