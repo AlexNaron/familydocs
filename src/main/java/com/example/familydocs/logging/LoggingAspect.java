@@ -17,11 +17,16 @@ public class LoggingAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 
+    @SuppressWarnings("EmptyMethod")
     @Pointcut("execution(* com.example.familydocs.controller..*.*(..))")
     public void controllerLayer() {}
 
+    @SuppressWarnings("EmptyMethod")
+
     @Pointcut("execution(* com.example.familydocs.service..*.*(..))")
     public void serviceLayer() {}
+
+    @SuppressWarnings("EmptyMethod")
 
     @Pointcut("controllerLayer() || serviceLayer()")
     public void applicationFlow() {}

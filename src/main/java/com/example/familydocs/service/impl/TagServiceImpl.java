@@ -4,7 +4,6 @@ import com.example.familydocs.exception.TagNotFoundByNameException;
 import com.example.familydocs.model.Document;
 import com.example.familydocs.model.Tag;
 import com.example.familydocs.model.User;
-import com.example.familydocs.repository.DocumentRepository;
 import com.example.familydocs.repository.TagRepository;
 import com.example.familydocs.repository.UserRepository;
 import com.example.familydocs.service.TagService;
@@ -20,15 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class TagServiceImpl implements TagService {
 
-    private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
 
     @Autowired
-    public TagServiceImpl(DocumentRepository documentRepository, UserRepository userRepository,
+    public TagServiceImpl(UserRepository userRepository,
                           TagRepository tagRepository){
 
-        this.documentRepository = documentRepository;
         this.userRepository=userRepository;
         this.tagRepository = tagRepository;
     }

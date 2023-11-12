@@ -36,13 +36,13 @@ public class DocumentControllerIntegrationTest {
 
     @SuppressWarnings("resource") //lifecycle of container is handled by JUnit
     @Container
-    public static MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:latest")
+    public static final MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:latest")
             .withDatabaseName("familydocs_test")
             .withUsername("familydocs_test_user")
             .withPassword("test_password");
 
     @Container
-    public static MinIOContainer minioContainer = new MinIOContainer("minio/minio:latest")
+    public static final MinIOContainer minioContainer = new MinIOContainer("minio/minio:latest")
             .withExposedPorts(9000) // MinIO default port
             .withEnv("MINIO_ROOT_USER", "test_minio")
             .withEnv("MINIO_ROOT_PASSWORD", "test_minio123")

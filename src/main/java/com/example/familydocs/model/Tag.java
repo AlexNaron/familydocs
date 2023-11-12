@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
