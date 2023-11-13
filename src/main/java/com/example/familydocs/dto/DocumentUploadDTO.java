@@ -4,9 +4,13 @@ import com.example.familydocs.model.Document;
 import org.springframework.web.multipart.MultipartFile;
 
 public class DocumentUploadDTO {
+
     private String documentDescription;
+
     private String documentName;
+
     private String documentStorageName;
+
     private MultipartFile file;
 
     public MultipartFile getFile() { return file; }

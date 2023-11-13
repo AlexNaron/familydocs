@@ -69,6 +69,7 @@ public class FileStorageService {
     }
 
     public InputStream downloadFile(String fileName) {
+
         try {
             return minioClient.getObject(GetObjectArgs.builder()
                     .bucket(bucketName)
@@ -80,6 +81,7 @@ public class FileStorageService {
     }
 
     public void deleteFile(String fileName) {
+
         try {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(fileName).build());
             logger.info("Minio service: PDF with name {} has been deleted", fileName);

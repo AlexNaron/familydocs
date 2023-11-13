@@ -11,14 +11,13 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String tagName;
 
     @ManyToMany(fetch = FetchType.LAZY)
-
     @JoinTable(name = "document_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "document_id"))
-
     private Set<Document> taggedDocuments = new HashSet<>();
 
     public void setTagName(String tagName) {

@@ -22,12 +22,10 @@ public class LoggingAspect {
     public void controllerLayer() {}
 
     @SuppressWarnings("EmptyMethod")
-
     @Pointcut("execution(* com.example.familydocs.service..*.*(..))")
     public void serviceLayer() {}
 
     @SuppressWarnings("EmptyMethod")
-
     @Pointcut("controllerLayer() || serviceLayer()")
     public void applicationFlow() {}
 

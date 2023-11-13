@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class TagServiceImpl implements TagService {
 
     private final UserRepository userRepository;
+
     private final TagRepository tagRepository;
 
     @Autowired
@@ -45,7 +46,7 @@ public class TagServiceImpl implements TagService {
     public Set<Document> getAllDocumentsForCurrentUserByTagName(String tagName){
 
         Optional<Tag> optionalTag = tagRepository.findByTagName(tagName);
-        if (!optionalTag.isPresent()) { throw new TagNotFoundByNameException(tagName); }
+        if (optionalTag.isEmpty()) { throw new TagNotFoundByNameException(tagName); }
         Tag currentTag = optionalTag.get();
         Set<Document> allDocumentsWithTagName = currentTag.getTaggedDocuments();
 

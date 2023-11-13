@@ -27,11 +27,14 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
-
     private final DocumentRepository documentRepository;
+
     private final UserRepository userRepository;
+
     private final TagRepository tagRepository;
+
     private final DocumentMapper documentMapper;
+
     private final TagMapper tagMapper;
 
     @Autowired
@@ -44,22 +47,25 @@ public class DocumentServiceImpl implements DocumentService {
         this.documentMapper = documentMapper;
         this.tagMapper = tagMapper;
     }
+
     protected User getUser(String userName){
 
         User user = userRepository.findByUsername(userName);
 
-        if (user == null) { throw new UsernameNotFoundException("User not found!"); }
+        if (user == null) { throw new UsernameNotFoundException(userName); }
 
         return user;
     }
+
     private Document getDocumentForUserById(String userName, Long documentId) {
 
         User user = getUser(userName);
         Optional<Document> optionalDocument = documentRepository.findByIdAndOwner(documentId, user);
-        if (!optionalDocument.isPresent()) { throw new DocumentNotFoundByIdException(documentId); }
+        if (optionalDocument.isEmpty()) { throw new DocumentNotFoundByIdException(documentId); }
 
         return optionalDocument.get();
     }
+
     @Override
     public Set<DocumentDTO> getAllDocumentsForUser(String userName) {
 
@@ -67,9 +73,7 @@ public class DocumentServiceImpl implements DocumentService {
         List<Document> documents = documentRepository.findByOwner(user);
 
         return documents.stream()
-                .map((Document document) -> {
-                    return documentMapper.toDTO(document);
-                })
+                .map(documentMapper::toDTO)
                 .collect(Collectors.toSet());
     }
 
@@ -82,8 +86,6 @@ public class DocumentServiceImpl implements DocumentService {
         return documentMapper.toDTO(documentRepository.save(document));
     }
 
-
-
     @Override
     public DocumentDTO getDocumentDTOForUserById(String userName, Long documentId) {
 
@@ -91,6 +93,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         return documentMapper.toDTO(document);
     }
+
     @Override
     public Set<TagDTO> getAllTagsDTOForDocumentForUserById(String userName, Long documentId) {
 
@@ -98,7 +101,7 @@ public class DocumentServiceImpl implements DocumentService {
         Set<Tag> tags = document.getTags();
 
         return tags.stream()
-                .map((Tag tag) -> tagMapper.toDTO(tag))
+                .map(tagMapper::toDTO)
                 .collect(Collectors.toSet());
     }
 
@@ -125,7 +128,7 @@ public class DocumentServiceImpl implements DocumentService {
         Document document = getDocumentForUserById(userName, documentId);
         Set<Tag> tagsOfDocument = document.getTags();
         Optional<Tag> optionalTagToRemove = tagRepository.findById(tagId);
-        if (!optionalTagToRemove.isPresent()) {
+        if (optionalTagToRemove.isEmpty()) {
             throw new TagNotFoundByIdException(tagId);
         }
         Tag tagToRemove = optionalTagToRemove.get();
@@ -146,12 +149,7 @@ public class DocumentServiceImpl implements DocumentService {
     public DocumentDTO deleteDocumentByIdForUser(UserDetails userDetails, Long documentId){
 
         Document document = getDocumentForUserById(userDetails.getUsername(), documentId);
-        if (document == null) {
-            throw new DocumentNotFoundByIdException(documentId);
-        }
-        for (Tag tag : document.getTags()) {
-            tag.getTaggedDocuments().remove(document);
-        }
+        for (Tag tag : document.getTags()) { tag.getTaggedDocuments().remove(document); }
         document.getTags().clear();
         documentRepository.deleteById(documentId);
 

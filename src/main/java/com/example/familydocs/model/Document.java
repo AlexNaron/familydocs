@@ -11,13 +11,17 @@ public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String documentName;
+
     private String documentDescription;
-    private String documentStorageName; // URL to access the PDF in object storage
+
+    private String documentStorageName; // Name under which the object is stored in storage
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User owner;
+
     @ManyToMany(mappedBy = "taggedDocuments")
     private Set<Tag> tags = new HashSet<>();
 

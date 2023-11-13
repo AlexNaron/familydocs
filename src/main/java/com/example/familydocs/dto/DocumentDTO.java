@@ -7,10 +7,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DocumentDTO {
+
     private Long id;
+
     private String documentName;
+
     private String documentDescription;
+
     private Set<String> tagNames =  new HashSet<>();
+
     private String documentStorageName; // Name to access the PDF in object storage
 
     public Long getId() {
@@ -21,9 +26,7 @@ public class DocumentDTO {
         this.id = id;
     }
 
-    public String getDocumentName() {
-        return documentName;
-    }
+    public String getDocumentName() { return documentName; }
 
     public void setDocumentName(String documentName) {
         this.documentName = documentName;

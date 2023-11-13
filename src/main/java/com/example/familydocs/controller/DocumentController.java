@@ -13,6 +13,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.util.Set;
 public class DocumentController {
 
     private final DocumentService documentService;
+
     private final FileStorageService fileStorageService;
 
     @Autowired
@@ -34,15 +36,17 @@ public class DocumentController {
         this.fileStorageService = fileStorageService;
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping
-    public Set<DocumentDTO> getAllDocumentsForUser(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Set<DocumentDTO>> getAllDocumentsForUser(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails) {
 
-        return documentService.getAllDocumentsForUser(userDetails.getUsername());
+        return ResponseEntity.ok(documentService.getAllDocumentsForUser(userDetails.getUsername()));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @PutMapping(consumes = {"multipart/form-data"})
-    public DocumentDTO uploadDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
-                                      @ModelAttribute DocumentUploadDTO uploadDTO) {
+    public ResponseEntity<DocumentDTO> uploadDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                      @ModelAttribute DocumentUploadDTO uploadDTO) {
 
         MultipartFile file = uploadDTO.getFile();
 
@@ -51,9 +55,10 @@ public class DocumentController {
 
         Document document = uploadDTO.toDocument();
 
-        return documentService.addDocumentForUser(userDetails.getUsername(), document);
+        return ResponseEntity.ok(documentService.addDocumentForUser(userDetails.getUsername(), document));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @DeleteMapping("/{documentId}")
     public ResponseEntity<DocumentDTO> deleteDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                                       @LoggableParameter @PathVariable Long documentId) {
@@ -68,13 +73,15 @@ public class DocumentController {
         return ResponseEntity.ok(documentDTO);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/{documentId}")
-    public DocumentDTO getDocumentById(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
-                                       @LoggableParameter @PathVariable Long documentId) {
+    public ResponseEntity<DocumentDTO> getDocumentById(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                       @LoggableParameter @PathVariable Long documentId) {
 
-        return documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId);
+        return ResponseEntity.ok(documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping("/{documentId}/tag")
     public ResponseEntity<DocumentDTO> addTagsForDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                                           @LoggableParameter @PathVariable Long documentId,
@@ -87,13 +94,15 @@ public class DocumentController {
         return ResponseEntity.ok(documentDTO);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/{documentId}/tag")
-    public Set<TagDTO> getTagsByDocumentId(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
-                                           @LoggableParameter @PathVariable Long documentId) {
+    public ResponseEntity<Set<TagDTO>> getTagsByDocumentId(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
+                                                           @LoggableParameter @PathVariable Long documentId) {
 
-        return documentService.getAllTagsDTOForDocumentForUserById(userDetails.getUsername(), documentId);
+        return ResponseEntity.ok(documentService.getAllTagsDTOForDocumentForUserById(userDetails.getUsername(), documentId));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @DeleteMapping("/{documentId}/tag/{tagId}")
     public ResponseEntity<String> deleteTagByIdForDocument(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                                            @LoggableParameter @PathVariable Long documentId,
@@ -105,6 +114,7 @@ public class DocumentController {
                 tagDTO.getId(), tagDTO.getTagName(), documentId));
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/{documentId}/pdf")
     public ResponseEntity<InputStreamResource> downloadOdfFile(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                                                @LoggableParameter @PathVariable Long documentId) {
@@ -112,10 +122,10 @@ public class DocumentController {
         DocumentDTO documentDTO = documentService.getDocumentDTOForUserById(userDetails.getUsername(), documentId);
         try {
             InputStream fileStream = fileStorageService.downloadFile(documentDTO.getDocumentStorageName());
-
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + documentDTO.getDocumentStorageName() + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + documentDTO.getDocumentStorageName() + "\"")
                     .body(new InputStreamResource(fileStream));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

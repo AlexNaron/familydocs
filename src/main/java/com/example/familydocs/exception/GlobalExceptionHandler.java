@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(DocumentNotFoundByIdException.class)
     public ResponseEntity<String> handleDocumentNotFound(DocumentNotFoundByIdException ex) {
 
