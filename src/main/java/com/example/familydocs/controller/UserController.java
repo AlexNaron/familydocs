@@ -22,14 +22,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @PostMapping
+    @PostMapping("/addUser")
     public ResponseEntity<User> addUser(@RequestBody User user) {
 
         return ResponseEntity.ok(userService.addUser(user));
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    @PostMapping
+    @PostMapping("/changePassword")
     public ResponseEntity<String> changePassword(@LoggableParameter @AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody String newPassword){
 
